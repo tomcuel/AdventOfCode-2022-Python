@@ -1,6 +1,6 @@
 I started doing the Advent Of Code 2022 in Python 
 
-Here is the website of this challenge : https://adventofcode.com/2022/about
+Here is the website of this challenge to see the problems : https://adventofcode.com/2022/about
 
 I will do it to get back to grips with Python after a while not using it 
 
