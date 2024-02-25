@@ -1,6 +1,6 @@
 # I open the file and read the lines, then I split the lines to be able to treat them separetely 
 with open("input4.txt", "r") as file:
-    lines = file.read().strip().split("\n")
+    lines = file.read()[:-1].split("\n")
 
 print()
 # just a test to see the content of the file
