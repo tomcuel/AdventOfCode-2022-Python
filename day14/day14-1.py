@@ -1,0 +1,95 @@
+# opening the file 
+with open("input14.txt","r") as file : 
+    input=file.read().strip().split("\n")
+
+# Where is the sand_source 
+sand_source=500, 0
+
+# we create a set to store the filled coordinates
+# we first fill it with the rocks 
+# then with the sand blocks 
+filled=set()
+# set used to be sure that we don't fill the same coordinates twice and don't have to do another function to check if the coordinates are already filled
+
+# getting the input data, as we want it 
+for line in input : 
+    coords=[]
+    # we split the coordinates to get the different points where the rocks changes of directions
+    for coord in line.split(" -> ") : 
+        x,y=map(int, coord.split(","))
+        coords.append((x,y))
+
+    # going trough the different directions of the rocks lines 
+    for i in range(1,len(coords)) : 
+        # we get the first and the last point of the direction we got in 
+        x1,y1=coords[i-1]
+        x2,y2=coords[i]
+        # we fill the coordinates between the two points
+
+        # if this is an horizontal line
+        if x1 != x2 : 
+            assert y1==y2
+            for x in range(min(x1,x2),max(x1,x2)+1) : 
+                filled.add((x,y1))
+
+        # if this is a vertical line
+        if y1 != y2 : 
+            assert x1==x2
+            for y in range(min(y1,y2),max(y1,y2)+1) : 
+                filled.add((x1,y))
+    
+
+# getting the max height so we know the depth from which we need to stop 
+max_y=max(y for x,y in filled)
+
+# we create a function to place one block of sand with the rules we have
+# he will go to the bottom 
+def generate_sand() : 
+    global filled
+    # we start from the sand_source
+    x,y=sand_source
+    # while we can go down starting from the sand_source
+    while y<max_y : 
+        # check if the block we can go down 
+        if (x,y+1) not in filled : 
+            y+=1
+            continue
+
+        # if we can't go down, we check if we can go down and left 
+        if (x-1,y+1) not in filled :
+            x-=1
+            y+=1
+            continue
+
+        # if we can't go down and left, we check if we can go down and right
+        if (x+1,y+1) not in filled : 
+            x+=1
+            y+=1
+            continue
+            
+        # add on if we can't go down, down-left or down-right
+        filled.add((x,y))
+        return True 
+    
+    return False
+
+# we fill the sand 
+# we stop when we can't fill anymore sand to place
+
+# we count the number of sand blocks we've been able to place
+sum=0
+while True : 
+    # placing the sand block if possible 
+    # checking if we've be able to place it 
+    res = generate_sand()
+    if not res : 
+        break
+
+    # if we've been able to place it, we add 1 to the sum
+    sum+=1
+
+
+# we print the sum of the sand blocks we've been able to place
+print("\nsum of the sand blocks we've been able to place : ",sum,"\n")
+
+# we find 24 sand blocks as expected with test.txt
